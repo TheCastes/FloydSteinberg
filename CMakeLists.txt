@@ -4,4 +4,5 @@ project(FloydSteinberg)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(FloydSteinberg main.cpp
-        Image.h)
+        Image.h
+        Dithering.h)

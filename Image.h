@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <algorithm>
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -29,7 +30,6 @@ public:
     Pixel operator+(int s) const {
         return Pixel{R + s, G + s, B + s, A + s};
     }
-
     Pixel operator+(const Pixel &p) const {
         return Pixel{R + p.R, G + p.G, B + p.B, A + p.A};
     }
@@ -38,6 +38,7 @@ public:
 
 class Image {
     public:
+
     explicit Image(const char *fileName) {
         if ((data = stbi_load(fileName, &width, &height, &channels, 0)) != nullptr) {
             size = width * height * channels;
@@ -45,6 +46,7 @@ class Image {
             std::cout << "Error loading image: " << fileName << "\n";
         }
     }
+
     ~Image() {
         if (data != nullptr) {
             stbi_image_free(data);
@@ -67,7 +69,7 @@ class Image {
         return channels;
     }
 
-    int getRes() {
+    int getRes() const {
         return width * height;
     }
 
@@ -99,6 +101,16 @@ class Image {
 
     void saveImagePNG(const char *fileName) const {
         stbi_write_png(fileName, width, height, channels, data, width * channels);
+    }
+
+    void toGreyScale() const {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                Pixel p = getPixel(x, y);
+                int L = static_cast<int>(0.2126 * p.R + 0.7152 * p.G + 0.0722 * p.B);
+                setPixel(x, y, Pixel{L, L, L, p.A});
+            }
+        }
     }
 
     private:
