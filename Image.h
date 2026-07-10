@@ -43,7 +43,7 @@ class Image {
         if ((data = stbi_load(fileName, &width, &height, &channels, 0)) != nullptr) {
             size = width * height * channels;
         } else {
-            std::cout << "Error loading image: " << fileName << "\n";
+            std::cerr << "Error loading image: " << fileName << "\n";
         }
     }
 
@@ -56,6 +56,10 @@ class Image {
         height = 0;
         channels = 0;
         size = 0;
+    }
+
+    bool isValid() const {
+        return data != nullptr;
     }
 
     int getWidth() const {
@@ -117,7 +121,7 @@ class Image {
     int width{};
     int height{};
     int channels{};
-    size_t size;
-    uint8_t *data;
+    size_t size{};
+    uint8_t *data = nullptr;
 };
 
